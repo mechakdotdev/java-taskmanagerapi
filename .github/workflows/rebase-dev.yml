@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -29,5 +29,3 @@ jobs:
       - name: Push changes
         run: |
           git push origin development --force
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
