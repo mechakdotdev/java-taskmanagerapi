@@ -29,5 +29,3 @@ jobs:
       - name: Push changes
         run: |
           git push origin development --force
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
