@@ -1,9 +1,9 @@
-name: Rebase development onto main
+name: Rebase main onto development
 
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
   rebase:
@@ -26,9 +26,9 @@ jobs:
       - name: Rebase development onto main
         run: |
           git fetch origin
-          git checkout development
-          git rebase origin/main
+          git checkout main
+          git rebase origin/development
 
       - name: Push changes
         run: |
-          git push origin development --force
+          git push origin main --force
