@@ -14,6 +14,7 @@ public class TaskMapper {
                 task.getId(),
                 task.getProject().getId(),
                 task.getLabel().stream().map(Label::getId).collect(Collectors.toList()),
+                task.getTitle(),
                 task.getPriority(),
                 task.getDueDate(),
                 task.getDescription()
@@ -24,6 +25,7 @@ public class TaskMapper {
         Task task = new Task(
                 project,
                 labels,
+                taskDTO.getTitle(),
                 taskDTO.getPriority(),
                 taskDTO.getDueDate(),
                 taskDTO.getDescription()
