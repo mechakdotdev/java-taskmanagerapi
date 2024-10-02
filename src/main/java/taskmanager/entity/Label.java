@@ -14,7 +14,7 @@ public class Label {
     private @Id Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "taskId")
     @NonNull
     private Task task;
 
