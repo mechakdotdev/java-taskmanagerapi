@@ -17,13 +17,16 @@ public class Task {
     private @Id Long id;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "projectId")
     @NonNull
     private Project project;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
     @NonNull
     private List<Label> label;
+
+    @NonNull
+    private String title;
 
     @NonNull
     private Integer priority;
