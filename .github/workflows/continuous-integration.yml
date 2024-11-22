@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22.0.2'
+          distribution: 'temurin'
+
+      - name: Install Dependencies
+        run: ./gradlew dependencies
+
+      - name: Run Tests
+        run: ./gradlew test
