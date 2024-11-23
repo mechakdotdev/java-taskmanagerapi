@@ -1,4 +1,4 @@
-name: Merge Dev into Main
+name: Mainline merge
 
 on:
   workflow_dispatch:
