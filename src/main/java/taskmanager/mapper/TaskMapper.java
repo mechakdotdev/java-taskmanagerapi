@@ -13,7 +13,7 @@ public class TaskMapper {
         return new TaskDTO(
                 task.getId(),
                 task.getProject().getId(),
-                task.getLabel().stream().map(Label::getId).collect(Collectors.toList()),
+                task.getLabels().stream().map(Label::getId).collect(Collectors.toList()),
                 task.getTitle(),
                 task.getPriority(),
                 task.getDueDate(),

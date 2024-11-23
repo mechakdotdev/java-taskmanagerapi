@@ -3,7 +3,7 @@ package taskmanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -23,7 +23,7 @@ public class Task {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
     @NonNull
-    private List<Label> label;
+    private List<Label> labels;
 
     @NonNull
     private String title;
@@ -32,7 +32,7 @@ public class Task {
     private Integer priority;
 
     @NonNull
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @NonNull
     private String description;

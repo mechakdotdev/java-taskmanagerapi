@@ -2,7 +2,7 @@ package taskmanager.dto;
 
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,6 +13,6 @@ public class TaskDTO {
     private List<Long> labelIds;
     private String title;
     private Integer priority;
-    private Date dueDate;
+    private LocalDate dueDate;
     private String description;
 }
