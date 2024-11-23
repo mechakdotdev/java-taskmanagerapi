@@ -23,12 +23,12 @@ jobs:
       - name: Run Tests
         run: ./gradlew test
 
-      - name: Merge Dev into Main
+      - name: Merge Development branch into Main
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout main
           git pull origin main
-          git merge --no-ff dev -m "Merge dev into main"
+          git merge --no-ff development -m "Merge dev into main"
           git push origin main
