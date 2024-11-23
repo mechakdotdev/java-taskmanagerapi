@@ -10,6 +10,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Development Branch
+        run: git fetch origin development
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -30,5 +35,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout main
           git pull origin main
-          git merge --no-ff development -m "Merge dev into main"
+          git merge --no-ff development -m "GitHub Action: Merge development branch into main"
           git push origin main
