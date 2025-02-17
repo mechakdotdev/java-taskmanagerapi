@@ -17,6 +17,11 @@ public class Task {
     private @Id Long id;
 
     @ManyToOne
+    @JoinColumn(name = "userId")
+    @NonNull
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "projectId")
     @NonNull
     private Project project;
