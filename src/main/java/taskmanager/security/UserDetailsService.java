@@ -4,17 +4,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import taskmanager.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import taskmanager.repository.UserRepository;
 
 import java.util.List;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public UserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

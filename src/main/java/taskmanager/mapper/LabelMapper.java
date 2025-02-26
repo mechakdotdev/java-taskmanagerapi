@@ -2,24 +2,24 @@ package taskmanager.mapper;
 
 import taskmanager.dto.LabelDTO;
 import taskmanager.entity.Label;
-import taskmanager.entity.Task;
+import taskmanager.entity.User;
 
 public class LabelMapper {
     public static LabelDTO toDto(Label label) {
         return new LabelDTO(
                 label.getId(),
-                label.getTask().getId(),
                 label.getTitle(),
-                label.getDescription()
+                label.getDescription(),
+                label.getCreatedBy().getId()
         );
     }
 
-    public static Label toEntity(LabelDTO labelDTO, Task task) {
+    public static Label toEntity(LabelDTO labelDTO, User createdBy) {
         Label label = new Label();
         label.setId(labelDTO.getId());
-        label.setTask(task);
         label.setTitle(labelDTO.getTitle());
         label.setDescription(labelDTO.getDescription());
+        label.setCreatedBy(createdBy);
         return label;
     }
 }

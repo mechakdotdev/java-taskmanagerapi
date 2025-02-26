@@ -3,24 +3,29 @@ package taskmanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "projects")
-@Getter @Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Project {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private @Id Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-    @NonNull
-    private List<Task> tasks;
-
-    @NonNull
+    @Column(nullable = false)
     private String name;
 
-    @NonNull
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    private User createdBy;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
 }

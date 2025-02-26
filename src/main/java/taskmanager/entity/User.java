@@ -1,30 +1,37 @@
 package taskmanager.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "users")
+@Table(name = "user")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @NonNull
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @NonNull
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "user")
+    private List<Project> projects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Label> labels = new ArrayList<>();
 }

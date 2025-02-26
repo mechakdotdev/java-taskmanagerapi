@@ -3,24 +3,29 @@ package taskmanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "labels")
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Label {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private @Id Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taskId")
-    @NonNull
-    private Task task;
-
-    @NonNull
+    @Column(nullable = false)
     private String title;
 
-    @NonNull
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    private User createdBy;
+
+    @ManyToMany(mappedBy = "labels")
+    private List<Task> tasks = new ArrayList<>();
 }

@@ -3,6 +3,8 @@ package taskmanager.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import taskmanager.dto.request.AuthenticationRequest;
+import taskmanager.dto.request.RegisterRequest;
 import taskmanager.entity.Role;
 import taskmanager.entity.User;
 import taskmanager.repository.UserRepository;
@@ -24,10 +26,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+
         User user = new User();
-        user.setUsername(request.get("username"));
-        user.setPassword(passwordEncoder.encode(request.get("password")));
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(Role.USER);
         userRepository.save(user);
 
@@ -35,11 +41,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        User user = userRepository.findByUsername(request.get("username"))
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
+        User user = userRepository.findByUsername(request.username())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        if (!passwordEncoder.matches(request.get("password"), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
