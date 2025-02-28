@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class LabelDTO {
     private Long id;
-    private Long taskId;
     private String title;
     private String description;
+    private Long createdById;
 }

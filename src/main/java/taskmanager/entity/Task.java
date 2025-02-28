@@ -3,37 +3,45 @@ package taskmanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "tasks")
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Task {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private @Id Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    private String description;
+
+    private LocalDateTime dueDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Priority priority = Priority.NONE;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    private User createdBy;
 
     @ManyToOne
     @JoinColumn(name = "projectId")
-    @NonNull
     private Project project;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
-    @NonNull
-    private List<Label> labels;
-
-    @NonNull
-    private String title;
-
-    @NonNull
-    private Integer priority;
-
-    @NonNull
-    private LocalDate dueDate;
-
-    @NonNull
-    private String description;
+    @ManyToMany
+    @JoinTable(
+            name = "taskLabel",
+            joinColumns = @JoinColumn(name = "taskId"),
+            inverseJoinColumns = @JoinColumn(name = "labelId")
+    )
+    private List<Label> labels = new ArrayList<>();
 }

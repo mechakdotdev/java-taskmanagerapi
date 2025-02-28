@@ -2,27 +2,24 @@ package taskmanager.mapper;
 
 import taskmanager.dto.ProjectDTO;
 import taskmanager.entity.Project;
-import taskmanager.entity.Task;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import taskmanager.entity.User;
 
 public class ProjectMapper {
     public static ProjectDTO toDto(Project project) {
         return new ProjectDTO(
                 project.getId(),
-                project.getTasks().stream().map(Task::getId).collect(Collectors.toList()),
                 project.getName(),
-                project.getDescription()
+                project.getDescription(),
+                project.getCreatedBy().getId()
         );
     }
 
-    public static Project toEntity(ProjectDTO projectDTO, List<Task> tasks) {
+    public static Project toEntity(ProjectDTO projectDTO, User createdBy) {
         Project project = new Project();
         project.setId(projectDTO.getId());
-        project.setTasks(tasks);
         project.setName(projectDTO.getName());
         project.setDescription(projectDTO.getDescription());
+        project.setCreatedBy(createdBy);
         return project;
     }
 }
