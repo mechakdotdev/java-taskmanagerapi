@@ -5,18 +5,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import taskmanager.entity.Role;
 import taskmanager.entity.User;
 import taskmanager.repository.UserRepository;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceTest {
 
@@ -27,7 +26,7 @@ public class UserDetailsServiceTest {
     private UserDetailsService userDetailsService;
 
     @Test
-    void loadUserByUsername_ReturnsUserDetails_WhenUserExists() {
+    void should_ReturnUserDetails_When_UserExists() {
         User user = new User(1L, "testUser", "password", Role.USER, null, null, null);
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
@@ -39,7 +38,7 @@ public class UserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UserNotFound_ThrowsException() {
+    void should_ThrowException_When_UserNotFound() {
         when(userRepository.findByUsername("unknownUser")).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () ->
