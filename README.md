@@ -4,8 +4,5 @@ A backend project written in Java for managing and scheduling tasks, with manual
 Progress: Initial project setup
 
 Class structure:
-![1000043575](https://github.com/user-attachments/assets/ee902ee2-0ed6-4ac0-90ab-0a475613d4fd)
+![image](https://github.com/user-attachments/assets/af6be0ee-6da6-4a0b-a5dc-598d176b3f21)
 
-
-Intended architecture:
-![1000043577](https://github.com/user-attachments/assets/96bcd7c9-fbaa-44dd-b3ec-668a09c2c6f2)
