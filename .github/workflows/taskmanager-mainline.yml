@@ -1,23 +1,32 @@
-name: TaskManager CI
+name: TaskManager Mainline
 
 on:
-  push:
-    branches:
-      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  authenticate-git:
+  setup-git:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Development Branch
+        run: git fetch origin development
 
   build:
     runs-on: ubuntu-latest
-    needs: authenticate-git
+    needs: setup-git
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -45,6 +54,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -62,3 +73,25 @@ jobs:
 
       - name: Run Tests
         run: ./gradlew test
+
+  merge-development-into-main:
+    runs-on: ubuntu-latest
+    needs: test
+    if: success()
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Development Branch
+        run: git fetch origin development
+
+      - name: Merge Development branch into Main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          git pull origin main
+          git merge --no-ff origin/development -m "GitHub Action: Merge development branch into main"
+          git push origin main
