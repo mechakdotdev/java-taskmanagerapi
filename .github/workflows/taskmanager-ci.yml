@@ -6,9 +6,15 @@ on:
       - '*'
 
 jobs:
-  test:
+  authenticate-git:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
+  setup-java:
+    runs-on: ubuntu-latest
+    needs: authenticate-git
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -19,11 +25,25 @@ jobs:
           java-version: '22.0.2'
           distribution: 'temurin'
 
+  build:
+    runs-on: ubuntu-latest
+    needs: setup-java
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Install Dependencies
         run: ./gradlew dependencies
 
       - name: Run Build
         run: ./gradlew build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Run Tests
         run: ./gradlew test
