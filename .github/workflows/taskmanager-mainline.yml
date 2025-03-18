@@ -22,6 +22,8 @@ jobs:
   setup-java:
     runs-on: ubuntu-latest
     needs: setup-git
+    outputs:
+      java-home: ${{ steps.java.outputs.path }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -29,10 +31,19 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Java
+        id: java
         uses: actions/setup-java@v3
         with:
           java-version: '22.0.2'
           distribution: 'temurin'
+
+      - name: Cache Java Environment
+        uses: actions/cache@v3
+        with:
+          path: ~/.java
+          key: java-${{ runner.os }}-22.0.2
+          restore-keys: |
+            java-${{ runner.os }}-
 
   build:
     runs-on: ubuntu-latest
@@ -42,6 +53,22 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Restore Java Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.java
+          key: java-${{ runner.os }}-22.0.2
+          restore-keys: |
+            java-${{ runner.os }}-
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Install Dependencies
         run: ./gradlew dependencies
@@ -57,6 +84,22 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Restore Java Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.java
+          key: java-${{ runner.os }}-22.0.2
+          restore-keys: |
+            java-${{ runner.os }}-
+
+      - name: Restore Gradle Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Run Tests
         run: ./gradlew test
