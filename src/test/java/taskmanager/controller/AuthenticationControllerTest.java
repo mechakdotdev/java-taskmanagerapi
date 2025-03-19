@@ -48,7 +48,7 @@ class AuthenticationControllerTest {
 
         when(userRepository.findByUsername("newUser")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("password")).thenReturn("hashedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(new User(1L, "newUser", "hashedPassword", Role.USER, null, null, null));
+        when(userRepository.save(any(User.class))).thenReturn(new User(12345L, "newUser", "hashedPassword", Role.USER, null, null, null));
 
         // Act
         // Assert
@@ -63,7 +63,7 @@ class AuthenticationControllerTest {
     void should_ReturnBadRequest_When_AttemptingToRegisterExistingUser() throws Exception {
         var request = new RegisterRequest("existingUser", "password");
 
-        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User(1L, "existingUser", "hashedPassword", Role.USER, null, null, null)));
+        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User(54321L, "existingUser", "hashedPassword", Role.USER, null, null, null)));
 
         // Act
         // Assert
