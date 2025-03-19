@@ -1,7 +1,12 @@
 name: TaskManager Mainline
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: [ "TaskManager CI" ]
+    types:
+      - completed
+    branches:
+      - development
 
 permissions:
   contents: write
@@ -9,6 +14,7 @@ permissions:
 
 jobs:
   setup-git:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
