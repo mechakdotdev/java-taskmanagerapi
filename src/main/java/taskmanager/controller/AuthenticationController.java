@@ -2,27 +2,30 @@ package taskmanager.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import taskmanager.dto.request.AuthenticationRequest;
 import taskmanager.dto.request.RegisterRequest;
+import taskmanager.dto.response.AuthenticationResponse;
 import taskmanager.entity.Role;
 import taskmanager.entity.User;
 import taskmanager.repository.UserRepository;
-import taskmanager.security.JwtUtility;
-
-import java.util.Map;
+import taskmanager.security.AuthenticationService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/authenticate")
 public class AuthenticationController {
+
+    private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtility jwtUtility;
 
-    public AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtility jwtUtility) {
+    public AuthenticationController(AuthenticationService authenticationService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.authenticationService = authenticationService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtility = jwtUtility;
     }
 
     @PostMapping("/register")
@@ -35,21 +38,15 @@ public class AuthenticationController {
         user.setUsername(request.username());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(Role.USER);
-        userRepository.save(user);
 
-        return ResponseEntity.ok(Map.of("message", "User registered successfully"));
+        userRepository.save(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
-        User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
-
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        String token = jwtUtility.generateToken(user.getUsername());
-        return ResponseEntity.ok(Map.of("token", token));
+        String token = authenticationService.generateToken(request.username());
+        return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 }
+
